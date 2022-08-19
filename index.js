@@ -1,5 +1,6 @@
 const { json } = require('express');
 const express = require('express');
+const morgan = require('morgan');
 
 const app = express();
 const port = 3001;
@@ -27,7 +28,12 @@ let persons = [
   },
 ];
 
+const unknownEndpoint = (req, res) => {
+  res.status(404).send({ error: 'unknown endpoint' });
+};
+
 app.use(express.json());
+app.use(morgan('tiny'));
 
 app.get('/', (req, res) => {
   res.send('<h1>Phonebook Backend</h1>');
@@ -103,6 +109,8 @@ app.delete('/api/persons/:id', (req, res) => {
     res.status(404).json({ message: `Person id ${id} not found on server.` });
   }
 });
+
+app.use(unknownEndpoint);
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
