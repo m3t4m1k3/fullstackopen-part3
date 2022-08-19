@@ -1,7 +1,39 @@
+# Good Request
 POST http://localhost:3001/api/persons
 Content-Type: application/json
 
 {
   "name": "Ling",
+  "number": "555-1234-5678"
+}
+
+###
+
+# Already Exists
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name": "Arto Hellas",
+    "number": "040-123456"
+}
+
+###
+
+# No Number
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+  "name": "Monkey"
+}
+
+###
+
+# No Name
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
   "number": "555-1234-5678"
 }

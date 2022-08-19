@@ -61,13 +61,23 @@ app.post('/api/persons', (req, res) => {
 
   if (!body.name) {
     return res.status(400).json({
-      message: 'name is missing.',
+      message: 'name is missing',
+    });
+  }
+
+  if (
+    persons
+      .map((person) => person.name.toLowerCase())
+      .includes(body.name.toLowerCase())
+  ) {
+    return res.status(400).json({
+      message: 'name must be unique',
     });
   }
 
   if (!body.number) {
     return res.status(400).json({
-      message: 'number is missing.',
+      message: 'number is missing',
     });
   }
 
