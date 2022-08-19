@@ -3,7 +3,7 @@ const express = require('express');
 const app = express();
 const port = 3001;
 
-const persons = [
+let persons = [
   {
     id: 1,
     name: 'Arto Hellas',
@@ -35,6 +35,18 @@ app.get('/info', (req, res) => {
     <p>Phonebook has info for ${persons.length} people</p>
     <p>${new Date()}</p>
   `);
+});
+
+app.delete('/api/persons/:id', (req, res) => {
+  const id = Number(req.params.id);
+  const deleteIndex = persons.map((person) => person.id).indexOf(id);
+
+  if (deleteIndex !== -1) {
+    persons.splice(deleteIndex, 1);
+    res.send({ message: `Person id ${id} removed.` });
+  } else {
+    res.status(404).json({ message: `Person id ${id} not found on server.` });
+  }
 });
 
 app.get('/api/persons', (req, res) => {
