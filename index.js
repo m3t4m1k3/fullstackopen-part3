@@ -1,3 +1,4 @@
+const { json } = require('express');
 const express = require('express');
 
 const app = express();
@@ -26,6 +27,8 @@ let persons = [
   },
 ];
 
+app.use(express.json());
+
 app.get('/', (req, res) => {
   res.send('<h1>Phonebook Backend</h1>');
 });
@@ -35,18 +38,6 @@ app.get('/info', (req, res) => {
     <p>Phonebook has info for ${persons.length} people</p>
     <p>${new Date()}</p>
   `);
-});
-
-app.delete('/api/persons/:id', (req, res) => {
-  const id = Number(req.params.id);
-  const deleteIndex = persons.map((person) => person.id).indexOf(id);
-
-  if (deleteIndex !== -1) {
-    persons.splice(deleteIndex, 1);
-    res.send({ message: `Person id ${id} removed.` });
-  } else {
-    res.status(404).json({ message: `Person id ${id} not found on server.` });
-  }
 });
 
 app.get('/api/persons', (req, res) => {
@@ -60,6 +51,46 @@ app.get('/api/persons/:id', (req, res) => {
     res.json(person);
   } else {
     res.status(404).end();
+  }
+});
+
+app.post('/api/persons', (req, res) => {
+  const body = req.body;
+
+  console.log(body);
+
+  if (!body.name) {
+    return res.status(400).json({
+      message: 'name is missing.',
+    });
+  }
+
+  if (!body.number) {
+    return res.status(400).json({
+      message: 'number is missing.',
+    });
+  }
+
+  const newPerson = {
+    id: Math.floor(Math.random() * 1000000),
+    name: body.name,
+    number: body.number,
+  };
+
+  persons = persons.concat(newPerson);
+
+  res.status(201).json(newPerson);
+});
+
+app.delete('/api/persons/:id', (req, res) => {
+  const id = Number(req.params.id);
+  const deleteIndex = persons.map((person) => person.id).indexOf(id);
+
+  if (deleteIndex !== -1) {
+    persons.splice(deleteIndex, 1);
+    res.send({ message: `Person id ${id} removed.` });
+  } else {
+    res.status(404).json({ message: `Person id ${id} not found on server.` });
   }
 });
 
