@@ -1,9 +1,7 @@
-const { json } = require('express');
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
 
-const PORT = process.env.PORT || 3001;
 const app = express();
 
 let persons = [
@@ -120,6 +118,7 @@ app.delete('/api/persons/:id', (req, res) => {
 
 app.use(unknownEndpoint);
 
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });
