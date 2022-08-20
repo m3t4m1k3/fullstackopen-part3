@@ -3,8 +3,8 @@ const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
 
+const PORT = process.env.PORT || 3001;
 const app = express();
-const port = process.env.PORT || 3001;
 
 let persons = [
   {
@@ -120,6 +120,6 @@ app.delete('/api/persons/:id', (req, res) => {
 
 app.use(unknownEndpoint);
 
-app.listen(port, () => {
-  console.log(`Listening on port ${port}`);
+app.listen(PORT, () => {
+  console.log(`Listening on port ${PORT}`);
 });
