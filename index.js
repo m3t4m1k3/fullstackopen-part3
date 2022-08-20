@@ -1,5 +1,6 @@
 const { json } = require('express');
 const express = require('express');
+const cors = require('cors');
 const morgan = require('morgan');
 
 const app = express();
@@ -37,6 +38,7 @@ morgan.token('body', function (req, res) {
 });
 
 app.use(express.json());
+app.use(cors());
 app.use(
   morgan(':method :url :status :res[content-length] - :response-time ms :body')
 );
