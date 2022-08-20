@@ -1,1 +1,2 @@
-# Full Stack Open 2022 - Part 3 - Phonebook Backend
+# Full Stack Open 2022
+## Phonebook Backend
