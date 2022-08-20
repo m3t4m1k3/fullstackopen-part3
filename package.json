@@ -20,12 +20,12 @@
   "homepage": "https://github.com/m3t4m1k3/fullstackopen-part3#readme",
   "devDependencies": {
     "kill-port": "^2.0.1",
-    "morgan": "^1.10.0",
     "nodemon": "^2.0.19"
   },
   "dependencies": {
+    "express": "^4.18.1",
     "cors": "^2.8.5",
-    "express": "^4.18.1"
+    "morgan": "^1.10.0"
   },
   "prettier": {
     "trailingComma": "es5",
