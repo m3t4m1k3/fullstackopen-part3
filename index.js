@@ -15,14 +15,14 @@ morgan.token("body", function (req, res) {
 // Middleware
 app.use(express.json());
 app.use(cors());
-// app.use(express.static("build"));
+app.use(express.static("build"));
 app.use(
   morgan(":method :url :status :res[content-length] - :response-time ms :body")
 );
 
-app.get("/", (req, res) => {
-  res.send("<h1>Phonebook Backend</h1>");
-});
+// app.get("/", (req, res) => {
+//   res.send("<h1>Phonebook Backend</h1>");
+// });
 
 app.get("/info", (req, res) => {
   Person.find({}).then((persons) => {
@@ -49,43 +49,38 @@ app.get("/api/persons", (req, res) => {
 //   }
 // });
 
-// app.post("/api/persons", (req, res) => {
-//   const body = req.body;
+app.post("/api/persons", (req, res) => {
+  const { name, number } = req.body;
 
-//   console.log(body);
+  if (!name) {
+    return res.status(400).json({
+      error: "name is missing",
+    });
+  }
 
-//   if (!body.name) {
-//     return res.status(400).json({
-//       message: "name is missing",
-//     });
-//   }
+  if (!number) {
+    return res.status(400).json({
+      error: "number is missing",
+    });
+  }
 
-//   if (
-//     persons
-//       .map((person) => person.name.toLowerCase())
-//       .includes(body.name.toLowerCase())
-//   ) {
-//     return res.status(400).json({
-//       message: "name must be unique",
-//     });
-//   }
+  // if (
+  //   persons
+  //     .map((person) => person.name.toLowerCase())
+  //     .includes(body.name.toLowerCase())
+  // ) {
+  //   return res.status(400).json({
+  //     message: "name must be unique",
+  //   });
+  // }
 
-//   if (!body.number) {
-//     return res.status(400).json({
-//       message: "number is missing",
-//     });
-//   }
-
-//   const newPerson = {
-//     id: Math.floor(Math.random() * 1000000),
-//     name: body.name,
-//     number: body.number,
-//   };
-
-//   persons = persons.concat(newPerson);
-
-//   res.status(201).json(newPerson);
-// });
+  new Person({ name, number })
+    .save()
+    .then((savedPerson) => {
+      res.json(savedPerson);
+    })
+    .catch();
+});
 
 // app.delete("/api/persons/:id", (req, res) => {
 //   const id = Number(req.params.id);
