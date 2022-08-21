@@ -10,28 +10,26 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/m3t4m1k3/fullstackopen-part3.git"
+    "url": "githttps://github.com/m3t4m1k3/fullstackopen-phonebook-backend.git"
   },
   "author": "Michael McGee",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/m3t4m1k3/fullstackopen-part3/issues"
-  },
-  "homepage": "https://github.com/m3t4m1k3/fullstackopen-part3#readme",
   "devDependencies": {
-    "kill-port": "^2.0.1",
-    "nodemon": "^2.0.19"
+    "nodemon": "^2.0.19",
+    "pretier": "^0.0.1"
   },
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "mongoose": "^6.5.2",
     "morgan": "^1.10.0"
   },
   "prettier": {
-    "trailingComma": "es5",
     "tabWidth": 2,
     "semi": true,
-    "singleQuote": true
+    "arrowParens": "always",
+    "trailingComma": "es5",
+    "singleQuote": false
   }
 }
