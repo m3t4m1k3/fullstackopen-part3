@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-// const morgan = require("morgan");
+const morgan = require("morgan");
 
 require("dotenv").config();
 
@@ -8,32 +8,34 @@ const Person = require("./models/person");
 
 const app = express();
 
-// morgan.token("body", function (req, res) {
-//   return req.method === "POST" ? JSON.stringify(req.body) : "";
-// });
+morgan.token("body", function (req, res) {
+  return req.method === "POST" ? JSON.stringify(req.body) : "";
+});
 
 // Middleware
 app.use(express.json());
 app.use(cors());
 // app.use(express.static("build"));
-// app.use(
-//   morgan(":method :url :status :res[content-length] - :response-time ms :body")
-// );
+app.use(
+  morgan(":method :url :status :res[content-length] - :response-time ms :body")
+);
 
-// app.get("/", (req, res) => {
-//   res.send("<h1>Phonebook Backend</h1>");
-// });
+app.get("/", (req, res) => {
+  res.send("<h1>Phonebook Backend</h1>");
+});
 
-// app.get("/info", (req, res) => {
-//   res.send(`
-//     <p>Phonebook has info for ${persons.length} people</p>
-//     <p>${new Date()}</p>
-//   `);
-// });
+app.get("/info", (req, res) => {
+  Person.find({}).then((persons) => {
+    res.send(`
+      <p>Phonebook has info for ${persons.length} people</p>
+      <p>${new Date()}</p>
+  `);
+  });
+});
 
 app.get("/api/persons", (req, res) => {
   Person.find({}).then((persons) => {
-    response.json(persons);
+    res.json(persons);
   });
 });
 
@@ -97,13 +99,13 @@ app.get("/api/persons", (req, res) => {
 //   }
 // });
 
-// const unknownEndpoint = (req, res) => {
-//   res.status(404).send({ error: "unknown endpoint" });
-// };
+const unknownEndpoint = (req, res) => {
+  res.status(404).send({ error: "unknown endpoint" });
+};
 
-// app.use(unknownEndpoint);
+app.use(unknownEndpoint);
 
-const PORT = 3001; //process.env.PORT || 3001;
+const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);

@@ -15,8 +15,7 @@
   "author": "Michael McGee",
   "license": "ISC",
   "devDependencies": {
-    "nodemon": "^2.0.19",
-    "pretier": "^0.0.1"
+    "nodemon": "^2.0.19"
   },
   "dependencies": {
     "cors": "^2.8.5",
