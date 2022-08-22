@@ -33,6 +33,6 @@
     "semi": true,
     "arrowParens": "always",
     "trailingComma": "es5",
-    "singleQuote": false
+    "singleQuote": true
   }
 }
