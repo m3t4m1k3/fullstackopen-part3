@@ -8,7 +8,7 @@ const Person = require("./models/person");
 
 const app = express();
 
-morgan.token("body", function (req, res) {
+morgan.token("body", function (req, _res) {
   return req.method === "POST" ? JSON.stringify(req.body) : "";
 });
 
@@ -24,7 +24,7 @@ app.use(
 //   res.send("<h1>Phonebook Backend</h1>");
 // });
 
-app.get("/info", (req, res) => {
+app.get("/info", (_req, res) => {
   Person.find({}).then((persons) => {
     res.send(`
       <p>Phonebook has info for ${persons.length} people</p>
@@ -33,7 +33,7 @@ app.get("/info", (req, res) => {
   });
 });
 
-app.get("/api/persons", (req, res) => {
+app.get("/api/persons", (_req, res) => {
   Person.find({}).then((persons) => {
     res.json(persons);
   });
@@ -82,23 +82,37 @@ app.post("/api/persons", (req, res) => {
     .catch();
 });
 
-// app.delete("/api/persons/:id", (req, res) => {
-//   const id = Number(req.params.id);
-//   const deleteIndex = persons.map((person) => person.id).indexOf(id);
+app.delete("/api/persons/:id", (req, res) => {
+  Person.findByIdAndRemove(req.params.id)
+    .then((deletedPerson) => {
+      if (deletedPerson) {
+        res.status(204).end();
+      } else {
+        res.status(404).send({ error: "id not found in database" });
+      }
+    })
+    .catch(() => {
+      res.status(400).send({ error: "malformatted id" });
+    });
+});
 
-//   if (deleteIndex !== -1) {
-//     persons.splice(deleteIndex, 1);
-//     res.send({ message: `Person id ${id} removed.` });
-//   } else {
-//     res.status(404).json({ message: `Person id ${id} not found on server.` });
-//   }
-// });
-
-const unknownEndpoint = (req, res) => {
+const unknownEndpoint = (_req, res) => {
   res.status(404).send({ error: "unknown endpoint" });
 };
 
 app.use(unknownEndpoint);
+
+// const errorHandler = (error, request, response, next) => {
+//   console.error(error.message);
+
+//   if (error.name === "CastError") {
+//     return response.status(400).send({ error: "malformatted id" });
+//   }
+
+//   next(error);
+// };
+
+// app.use(errorHandler);
 
 const PORT = process.env.PORT || 3001;
 
