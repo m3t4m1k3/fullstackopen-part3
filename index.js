@@ -4,7 +4,6 @@ const cors = require('cors');
 const morgan = require('morgan');
 require('dotenv').config();
 const Person = require('./models/person');
-const { update } = require('./models/person');
 
 morgan.token('body', function (req, _res) {
   return req.method === 'POST' ? JSON.stringify(req.body) : '';
@@ -21,10 +20,12 @@ app.use(cors());
 
 app.use(express.static('build'));
 
+// Root
 app.get('/', (_req, res) => {
   res.send('<h1>Phonebook Backend</h1>');
 });
 
+// Info
 app.get('/info', (_req, res, next) => {
   Person.find({})
     .then((persons) => {
@@ -34,12 +35,6 @@ app.get('/info', (_req, res, next) => {
       `);
     })
     .catch((error) => next(error));
-});
-
-app.get('/api/persons', (_req, res) => {
-  Person.find({}).then((persons) => {
-    res.json(persons);
-  });
 });
 
 // Create
@@ -62,6 +57,28 @@ app.post('/api/persons', (req, res, next) => {
     .save()
     .then((savedPerson) => {
       res.json(savedPerson);
+    })
+    .catch((error) => next(error));
+});
+
+// Read All
+app.get('/api/persons', (_req, res, next) => {
+  Person.find({})
+    .then((persons) => {
+      res.json(persons);
+    })
+    .catch((error) => next(error));
+});
+
+// Read One
+app.get('/api/persons/:id', (req, res, next) => {
+  Person.findById(req.params.id)
+    .then((person) => {
+      if (person) {
+        res.json(person);
+      } else {
+        res.status(404).send({ error: 'id not found in database' });
+      }
     })
     .catch((error) => next(error));
 });
