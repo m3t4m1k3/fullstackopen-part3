@@ -1,12 +1,13 @@
 const mongoose = require('mongoose');
 
+// eslint-disable-next-line no-undef
 const url = process.env.MONGODB_URI;
 
 console.log('connecting to MongoDB');
 
 mongoose
   .connect(url)
-  .then((result) => {
+  .then(() => {
     console.log('connected to MongoDB');
   })
   .catch((error) => {
@@ -34,7 +35,7 @@ const personSchema = new mongoose.Schema({
 });
 
 personSchema.set('toJSON', {
-  transform: (document, returnedObject) => {
+  transform: (_document, returnedObject) => {
     returnedObject.id = returnedObject._id.toString();
     delete returnedObject._id;
     delete returnedObject.__v;

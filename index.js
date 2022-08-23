@@ -5,7 +5,7 @@ const morgan = require('morgan');
 require('dotenv').config();
 const Person = require('./models/person');
 
-morgan.token('body', function (req, _res) {
+morgan.token('body', function (req) {
   return req.method === 'POST' ? JSON.stringify(req.body) : '';
 });
 
@@ -39,9 +39,9 @@ app.get('/info', (_req, res, next) => {
 
 // Create
 app.post('/api/persons', (req, res, next) => {
-  const { name, number } = req.body;
+  const { name, number, } = req.body;
 
-  new Person({ name, number })
+  new Person({ name, number, })
     .save()
     .then((savedPerson) => {
       res.json(savedPerson);
@@ -65,7 +65,7 @@ app.get('/api/persons/:id', (req, res, next) => {
       if (person) {
         res.json(person);
       } else {
-        res.status(404).send({ error: 'id not found in database' });
+        res.status(404).send({ error: 'id not found in database', });
       }
     })
     .catch((error) => next(error));
@@ -73,11 +73,11 @@ app.get('/api/persons/:id', (req, res, next) => {
 
 // Update
 app.put('/api/persons/:id', (request, response, next) => {
-  const { name, number } = request.body;
-  const { id } = request.params;
-  const person = { name, number };
+  const { name, number, } = request.body;
+  const { id, } = request.params;
+  const person = { name, number, };
 
-  Person.findByIdAndUpdate(id, person, { new: true, runValidators: true })
+  Person.findByIdAndUpdate(id, person, { new: true, runValidators: true, })
     .then((updatedPerson) => {
       response.json(updatedPerson);
     })
@@ -85,13 +85,13 @@ app.put('/api/persons/:id', (request, response, next) => {
 });
 
 // Delete
-app.delete('/api/persons/:id', (req, res) => {
+app.delete('/api/persons/:id', (req, res, next) => {
   Person.findByIdAndRemove(req.params.id)
     .then((deletedPerson) => {
       if (deletedPerson) {
         res.status(204).end();
       } else {
-        res.status(404).send({ error: 'id not found in database' });
+        res.status(404).send({ error: 'id not found in database', });
       }
     })
     .catch((error) => next(error));
@@ -99,7 +99,7 @@ app.delete('/api/persons/:id', (req, res) => {
 
 // Middlware to handle unknown endpoint requests
 const unknownEndpoint = (_req, res) => {
-  res.status(404).send({ error: 'unknown endpoint' });
+  res.status(404).send({ error: 'unknown endpoint', });
 };
 
 app.use(unknownEndpoint);
@@ -109,9 +109,9 @@ const errorHandler = (error, _request, response, next) => {
   console.error(error.message);
 
   if (error.name === 'CastError') {
-    return response.status(400).send({ error: 'malformatted id' });
+    return response.status(400).send({ error: 'malformatted id', });
   } else if (error.name === 'ValidationError') {
-    return response.status(400).json({ error: error.message });
+    return response.status(400).json({ error: error.message, });
   }
 
   next(error);
@@ -120,6 +120,8 @@ const errorHandler = (error, _request, response, next) => {
 app.use(errorHandler);
 
 // Run Express app
+
+// eslint-disable-next-line no-undef
 const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, () => {
