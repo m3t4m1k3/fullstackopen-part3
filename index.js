@@ -97,12 +97,14 @@ app.delete('/api/persons/:id', (req, res) => {
     .catch((error) => next(error));
 });
 
+// Middlware to handle unknown endpoint requests
 const unknownEndpoint = (_req, res) => {
   res.status(404).send({ error: 'unknown endpoint' });
 };
 
 app.use(unknownEndpoint);
 
+// Middleware for error handling
 const errorHandler = (error, _request, response, next) => {
   console.error(error.message);
 
@@ -117,6 +119,7 @@ const errorHandler = (error, _request, response, next) => {
 
 app.use(errorHandler);
 
+// Run Express app
 const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, () => {
